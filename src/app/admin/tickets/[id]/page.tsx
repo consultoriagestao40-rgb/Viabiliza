@@ -35,6 +35,8 @@ import TicketAssignment from "@/components/admin/TicketAssignment";
 import ChatInterface from "@/components/admin/ChatInterface";
 import TicketValue from "@/components/admin/TicketValue";
 import ActivityTimeline from "@/components/admin/ActivityTimeline";
+import TicketCostBox from "@/components/admin/TicketCostBox";
+import TicketCostBox from "@/components/admin/TicketCostBox";
 
 export default async function TicketDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -138,6 +140,18 @@ export default async function TicketDetailsPage({ params }: { params: Promise<{ 
                     <TicketValue
                         ticketId={ticket.id}
                         initialValue={ticket.value}
+                    />
+
+                    <TicketCostBox
+                        displacementCost={ticket.displacementCost}
+                        distanceKm={ticket.distanceKm}
+                        durationMin={ticket.durationMin}
+                    />
+
+                    <TicketCostBox
+                        displacementCost={ticket.displacementCost}
+                        distanceKm={ticket.distanceKm}
+                        durationMin={ticket.durationMin}
                     />
 
                     <TicketActions
