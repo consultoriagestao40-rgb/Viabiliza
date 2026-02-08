@@ -152,7 +152,7 @@ export default async function TicketDetailsPage({ params }: { params: Promise<{ 
                         technicians={technicians}
                     />
 
-                    <ChatInterface ticketId={ticket.id} />
+                    <ChatInterface ticketId={ticket.id} clientPhone={ticket.user?.phone} />
                 </div>
             </div>
         </div >
