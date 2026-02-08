@@ -86,7 +86,7 @@ export async function calculateTripCost(distanceKm: number, durationMin: number)
         fuelCostPerKm: fuelCostKm,
         maintenanceCostPerKm: maintenance,
         depreciationCostPerKm: depreciationKm,
-        totalCostPerKm,
+        totalCostPerKm: totalCostKm,
 
         displacementCost: totalCost
     };
