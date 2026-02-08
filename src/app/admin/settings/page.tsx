@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { User, Bell, Shield, Building, Moon, Sun, Save } from "lucide-react";
+import { User, Bell, Shield, Building, Moon, Sun, Save, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import Link from "next/link";
 
 const prisma = new PrismaClient();
 
@@ -35,6 +36,11 @@ export default async function SettingsPage() {
                     <button className="w-full flex items-center gap-3 px-4 py-2 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg">
                         <Shield className="h-4 w-4" /> Segurança
                     </button>
+                    <Link href="/admin/settings/mileage">
+                        <button className="w-full flex items-center gap-3 px-4 py-2 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg text-left">
+                            <Car className="h-4 w-4" /> Deslocamento & Custos
+                        </button>
+                    </Link>
                 </div>
 
                 {/* Main Content */}

@@ -85,6 +85,25 @@ model Ticket {
   transactions  Transaction[]
   messages      Message[]
   activities    TicketActivity[]
+
+  // Cost & Displacement Data
+  distanceKm          Float?
+  totalDistanceKm     Float?    // distanceKm * multiplier
+  durationMin         Float?
+  
+  gasPrice           Float?
+  gasPriceSource     String?
+  gasPriceDate       DateTime?
+  
+  fuelCostPerKm      Float?
+  maintenanceCostPerKm Float?
+  depreciationCostPerKm Float?
+  totalCostPerKm     Float?
+  
+  displacementCost   Float?     // totalDistanceKm * totalCostPerKm
+  
+  calcParamsVersion  String?    // Hash of settings used
+  isRouteCacheHit    Boolean    @default(false)
 }
 
 model Transaction {
@@ -129,3 +148,29 @@ model TicketActivity {
 }
 
 
+
+model SystemSetting {
+  key         String   @id
+  value       String   // JSON string or simple value
+  type        String   // 'STRING', 'NUMBER', 'JSON'
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model GasPriceHistory {
+  id        String   @id @default(cuid())
+  price     Float
+  source    String   // 'API', 'FALLBACK', 'MANUAL'
+  date      DateTime @default(now())
+}
+
+model RouteCache {
+  id             String   @id @default(cuid())
+  origin         String
+  destination    String
+  distanceKm     Float
+  durationMin    Float
+  normalizedHash String   @unique // Hash of origin+normalized_destination
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
