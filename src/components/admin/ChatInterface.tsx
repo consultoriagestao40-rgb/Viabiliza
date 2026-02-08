@@ -107,29 +107,31 @@ export default function ChatInterface({ ticketId, clientPhone }: { ticketId: str
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                     />
-                </Button>
-                <Button
-                    onClick={() => {
-                        if (!clientPhone) {
-                            alert("Cliente sem telefone cadastrado!");
-                            return;
-                        }
-                        if (!newMessage.trim()) {
-                            alert("Digite uma mensagem para enviar no WhatsApp.");
-                            return;
-                        }
-                        // Remove non-numeric chars
-                        const phone = clientPhone.replace(/\D/g, '');
-                        const text = encodeURIComponent(newMessage);
-                        window.open(`https://wa.me/55${phone}?text=${text}`, '_blank');
-                    }}
-                    className="bg-[#25D366] hover:bg-[#128C7E] text-white"
-                    title="Enviar no WhatsApp"
-                >
-                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                </Button>
+                    <Button onClick={handleSend} className="bg-green-600 hover:bg-green-700 text-white">
+                        <Send className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            if (!clientPhone) {
+                                alert("Cliente sem telefone cadastrado!");
+                                return;
+                            }
+                            if (!newMessage.trim()) {
+                                alert("Digite uma mensagem para enviar no WhatsApp.");
+                                return;
+                            }
+                            // Remove non-numeric chars
+                            const phone = clientPhone.replace(/\D/g, '');
+                            const text = encodeURIComponent(newMessage);
+                            window.open(`https://wa.me/55${phone}?text=${text}`, '_blank');
+                        }}
+                        className="bg-[#25D366] hover:bg-[#128C7E] text-white"
+                        title="Enviar no WhatsApp"
+                    >
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    </Button>
+                </div>
             </div>
-        </div>
         </div >
     );
 }
