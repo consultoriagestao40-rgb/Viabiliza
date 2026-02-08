@@ -16,14 +16,20 @@ export async function POST(req: Request) {
             );
         }
 
-        const { serviceType, description, location, urgency, scheduledDate } = await req.json();
+        const { serviceType, description, location, urgency, scheduledDate, phone } = await req.json();
 
-        if (!serviceType || !description || !location) {
+        if (!serviceType || !description || !location || !phone) {
             return NextResponse.json(
                 { message: "Missing required fields" },
                 { status: 400 }
             );
         }
+
+        // Update user phone number if provided
+        await prisma.user.update({
+            where: { id: session.user.id },
+            data: { phone }
+        });
 
         const ticket = await prisma.ticket.create({
             data: {

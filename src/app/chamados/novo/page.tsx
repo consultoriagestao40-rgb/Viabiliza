@@ -34,6 +34,7 @@ export default function NewTicketPage() {
         urgency: 'Normal',
         location: '',
         scheduledDate: '',
+        phone: '', // Mandatory phone
         photos: [] as string[]
     });
 
@@ -164,6 +165,23 @@ export default function NewTicketPage() {
                                             onChange={(e) => updateField('description', e.target.value)}
                                         />
                                     </div>
+
+                                    <div>
+                                        <Label className="text-base">WhatsApp / Celular com DDD <span className="text-red-500">*</span></Label>
+                                        <Input
+                                            className="mt-2 h-12 text-lg"
+                                            placeholder="(XX) 9XXXX-XXXX"
+                                            value={formData.phone}
+                                            onChange={(e) => {
+                                                // Mascara simples de telefone
+                                                let v = e.target.value.replace(/\D/g, "");
+                                                if (v.length > 11) v = v.slice(0, 11);
+                                                updateField('phone', v);
+                                            }}
+                                        />
+                                        <p className="text-xs text-neutral-500 mt-1">Este número será usado para contato via WhatsApp.</p>
+                                    </div>
+
                                     <div>
                                         <Label className="text-base mb-3 block">Nível de Urgência</Label>
                                         <div className="flex flex-wrap gap-3">
@@ -258,7 +276,7 @@ export default function NewTicketPage() {
                         {currentStep < STEPS.length - 1 ? (
                             <Button onClick={handleNext} disabled={
                                 (currentStep === 0 && !formData.serviceType) ||
-                                (currentStep === 1 && !formData.description) ||
+                                (currentStep === 1 && (!formData.description || !formData.phone || formData.phone.length < 10)) ||
                                 (currentStep === 2 && !formData.location)
                             }>
                                 Próximo <ChevronRight className="ml-2 h-4 w-4" />
