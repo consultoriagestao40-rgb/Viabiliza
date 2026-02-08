@@ -34,9 +34,8 @@ import TicketActions from "@/components/admin/TicketActions";
 import TicketAssignment from "@/components/admin/TicketAssignment";
 import ChatInterface from "@/components/admin/ChatInterface";
 import TicketValue from "@/components/admin/TicketValue";
-import ActivityTimeline from "@/components/admin/ActivityTimeline";
 import TicketCostBox from "@/components/admin/TicketCostBox";
-import TicketCostBox from "@/components/admin/TicketCostBox";
+
 
 export default async function TicketDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
