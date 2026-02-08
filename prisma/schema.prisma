@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(cuid())
+  name            String?
+  email           String    @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  role            String    @default("USER")
+  active          Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  specialty       String?
+  phone           String?
+  accounts        Account[]
+  sessions        Session[]
+  assignedTickets Ticket[]  @relation("TechnicianTickets")
+  tickets         Ticket[]  @relation("ClientTickets")
+  messages        Message[]
+  activities      TicketActivity[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Ticket {
+  id            String        @id @default(cuid())
+  userId        String
+  serviceType   String
+  description   String
+  location      String
+  urgency       String?
+  scheduledDate DateTime?
+  status        String        @default("OPEN")
+  photos        String?
+  value         Float?
+  technicianId  String?
+  rating        Int?
+  review        String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  technician    User?         @relation("TechnicianTickets", fields: [technicianId], references: [id])
+  user          User          @relation("ClientTickets", fields: [userId], references: [id])
+  transactions  Transaction[]
+  messages      Message[]
+  activities    TicketActivity[]
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  description String
+  category    String
+  amount      Float
+  type        String
+  status      String
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ticketId    String?
+  ticket      Ticket?  @relation(fields: [ticketId], references: [id])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  senderId  String?  // Null if from system/external (e.g. WhatsApp user without account)
+  senderType String  // 'USER', 'SYSTEM', 'WHATSAPP'
+  ticketId  String
+  createdAt DateTime @default(now())
+  
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  sender    User?    @relation(fields: [senderId], references: [id])
+}
+
+model TicketActivity {
+  id        String   @id @default(cuid())
+  ticketId  String
+  userId    String
+  type      String   // 'NOTE', 'CALL', 'EMAIL', 'MEETING', 'ATTACHMENT', 'STATUS_CHANGE'
+  content   String
+  date      DateTime? // For scheduled activities (due date)
+  done      Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+
